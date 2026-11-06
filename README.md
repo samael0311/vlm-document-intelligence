@@ -30,7 +30,7 @@ The pipeline replaces brittle coordinate/bounding-box OCR engines (e.g. Tesserac
 
 ---
 
-## 🚀 Key Technical Capabilities
+##  Key Technical Capabilities
 
 - **Zero-Template Visual Understanding:** Replaces rigid coordinate-based bounding box extractors with modern Vision-Language Models (Qwen 2.5-VL 7B / GPT-4o) capable of contextual reasoning across multi-column, nested tabular invoices.
 - **Strict Pydantic V2 Determinism:** Guarantees dates in `YYYY-MM-DD` ISO 8601 format, monetary amounts as exact `Decimal` precision, and currencies mapped to standard 3-letter ISO codes.
@@ -46,7 +46,7 @@ The pipeline replaces brittle coordinate/bounding-box OCR engines (e.g. Tesserac
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```
 .
@@ -86,7 +86,7 @@ The pipeline replaces brittle coordinate/bounding-box OCR engines (e.g. Tesserac
 
 ---
 
-## ⚡ Quickstart
+##  Quickstart
 
 ### 1. Clone & Set Up Environment
 
@@ -135,7 +135,7 @@ Interactive API documentation available at `http://localhost:8000/docs`.
 
 ---
 
-## 🐳 Docker Deployment
+##  Docker Deployment
 
 Run with Docker Compose:
 
@@ -151,7 +151,7 @@ curl http://localhost:8000/health
 
 ---
 
-## 📡 API Usage & Curl Examples
+##  API Usage & Curl Examples
 
 ### Extract Document (PDF or Image)
 
@@ -234,7 +234,7 @@ curl -X POST "http://localhost:8000/api/v1/extract" \
 
 ---
 
-## 📊 Benchmark & Performance Metrics
+##  Benchmark & Performance Metrics
 
 Benchmarked on AWS EC2 `g5.2xlarge` (NVIDIA A10G 24GB VRAM) across 500 heterogeneous document scans:
 
@@ -249,13 +249,9 @@ Benchmarked on AWS EC2 `g5.2xlarge` (NVIDIA A10G 24GB VRAM) across 500 heterogen
 
 ---
 
-## 🔒 Security & Data Privacy
+##  Security & Data Privacy
 
 - **Zero Data Retention:** Memory buffers are immediately flushed post-inference; zero customer document images are cached on disk.
 - **Enterprise Network Isolation:** Easily packaged to run completely air-gapped or within VPC private subnets without external internet access when using self-hosted open-weights models (`Qwen/Qwen2.5-VL-7B`).
 
 ---
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
