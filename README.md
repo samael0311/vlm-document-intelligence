@@ -91,7 +91,7 @@ The pipeline replaces brittle coordinate/bounding-box OCR engines (e.g. Tesserac
 ### 1. Clone & Set Up Environment
 
 ```bash
-git clone https://github.com/your-username/vlm-document-intelligence.git
+git clone https://github.com/samael0311/vlm-document-intelligence.git
 cd vlm-document-intelligence
 
 python -m venv venv
