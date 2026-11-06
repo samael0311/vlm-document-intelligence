@@ -38,5 +38,6 @@ Architected an automated multimodal pipeline using Vision-Language Models (Qwen 
 
 ---
 
-### Media File to Upload:
+### Media & Deliverables:
 - **Architecture Diagram:** [`architecture_diagram.png`](./architecture_diagram.png) *(Real, clean 1600x900 enterprise system architecture diagram)*
+- **Public GitHub Repository:** [https://github.com/samael0311/vlm-document-intelligence](https://github.com/samael0311/vlm-document-intelligence) *(Complete FastAPI, Pydantic V2, Docker, & Pytest codebase)*
