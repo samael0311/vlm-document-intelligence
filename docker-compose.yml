@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  vlm-extractor-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vlm-document-extractor
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+      - VLM_PROVIDER=mock  # Set to 'openai' or 'qwen' in deployment
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - LOG_LEVEL=info
+      - WORKERS=2
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

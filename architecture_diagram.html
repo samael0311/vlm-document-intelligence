@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enterprise Multimodal Document Intelligence Pipeline (Lucidchart Style)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1600px;
+      height: 900px;
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      padding: 36px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Lucidchart Canvas Dot Grid */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      position: relative;
+      z-index: 2;
+    }
+    .header-titles h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+    .header-titles p {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .metadata-bar {
+      display: flex;
+      gap: 12px;
+      background: #ffffff;
+      padding: 8px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      font-size: 12px;
+      color: #475569;
+    }
+    .metadata-bar strong {
+      color: #1e40af;
+    }
+
+    /* Swimlanes Layout */
+    .workflow-container {
+      display: grid;
+      grid-template-columns: 240px 840px 320px;
+      gap: 24px;
+      height: 740px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .swimlane {
+      border-radius: 12px;
+      padding: 20px 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lane-sources {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+    }
+
+    .lane-aws {
+      background: #f0f7ff;
+      border: 1.5px dashed #93c5fd;
+    }
+
+    .lane-storage {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+    }
+
+    .lane-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lane-sources .lane-title { color: #64748b; }
+    .lane-aws .lane-title { color: #1d4ed8; }
+    .lane-storage .lane-title { color: #15803d; }
+
+    /* Node Cards */
+    .node-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .node-card.highlight {
+      border: 2px solid #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+
+    .top-accent {
+      position: absolute;
+      top: 0; left: 8px; right: 8px;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+    .accent-blue { background: #2563eb; }
+    .accent-gray { background: #94a3b8; }
+    .accent-amber { background: #f59e0b; }
+    .accent-green { background: #10b981; }
+    .accent-red { background: #ef4444; }
+
+    .node-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .node-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    .node-list {
+      list-style: none;
+      margin-top: 8px;
+    }
+    .node-list li {
+      font-size: 11px;
+      color: #334155;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .node-list li::before {
+      content: "•";
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    /* Subgrid for AWS lane */
+    .aws-grid {
+      display: grid;
+      grid-template-columns: 240px 280px 240px;
+      gap: 20px;
+      align-items: flex-start;
+      margin-top: 10px;
+    }
+
+    /* SVG Connectors Overlay */
+    .svg-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1600px;
+      height: 900px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .connector-line {
+      fill: none;
+      stroke: #64748b;
+      stroke-width: 1.75;
+    }
+    .connector-dashed {
+      fill: none;
+      stroke: #dc2626;
+      stroke-width: 1.75;
+      stroke-dasharray: 4,3;
+    }
+    .connector-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Connectors -->
+  <svg class="svg-canvas">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b"/>
+      </marker>
+      <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#15803d"/>
+      </marker>
+      <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+      </marker>
+    </defs>
+
+    <!-- Source -> Preprocessor -->
+    <path d="M 288 230 L 320 230 L 320 310 L 396 310" class="connector-line" marker-end="url(#arrow)"/>
+    <path d="M 288 410 L 396 410" class="connector-line" marker-end="url(#arrow)"/>
+    <path d="M 288 590 L 320 590 L 320 440 L 396 440" class="connector-line" marker-end="url(#arrow)"/>
+
+    <!-- Preprocessor -> VLM -->
+    <path d="M 636 340 L 686 340" class="connector-line" marker-end="url(#arrow)"/>
+
+    <!-- VLM -> Pydantic -->
+    <path d="M 966 340 L 1006 340" class="connector-line" marker-end="url(#arrow)"/>
+
+    <!-- Pydantic -> Human Review (Fail) -->
+    <path d="M 1120 445 L 1120 520" class="connector-dashed" marker-end="url(#arrow-red)"/>
+    <text x="1126" y="485" class="connector-label" fill="#dc2626">Validation Fail</text>
+
+    <!-- Pydantic -> Postgres -->
+    <path d="M 1246 310 L 1286 310" class="connector-line" marker-end="url(#arrow-green)"/>
+    <text x="1250" y="295" class="connector-label" fill="#15803d">Validated JSON</text>
+
+    <!-- Pydantic -> CSV -->
+    <path d="M 1246 350 L 1266 350 L 1266 490 L 1286 490" class="connector-line" marker-end="url(#arrow)"/>
+
+    <!-- Pydantic -> Hooks -->
+    <path d="M 1246 370 L 1256 370 L 1256 670 L 1286 670" class="connector-line" marker-end="url(#arrow)"/>
+  </svg>
+
+  <div class="header">
+    <div class="header-titles">
+      <h1>Enterprise Multimodal Document Intelligence Pipeline</h1>
+      <p>End-to-End Visual Document Understanding with Vision-Language Models (Qwen 2.5-VL) & Pydantic Guardrails</p>
+    </div>
+    <div class="metadata-bar">
+      <div>Host: <strong>AWS EC2 G5.xlarge</strong></div>
+      <div>|</div>
+      <div>Framework: <strong>FastAPI / vLLM</strong></div>
+      <div>|</div>
+      <div>Guardrails: <strong>Pydantic v2 Strict</strong></div>
+      <div>|</div>
+      <div>Throughput: <strong>&lt; 60s / Document</strong></div>
+    </div>
+  </div>
+
+  <div class="workflow-container">
+    
+    <!-- SWIMLANE 1: SOURCES -->
+    <div class="swimlane lane-sources">
+      <div class="lane-title">1. Source Documents</div>
+      
+      <div class="node-card" style="margin-top: 10px;">
+        <div class="top-accent accent-gray"></div>
+        <div class="node-header">
+          <div class="node-title">Supplier Invoices</div>
+          <div class="badge badge-gray">PDF</div>
+        </div>
+        <ul class="node-list">
+          <li>Multi-supplier invoices (20+ layouts)</li>
+          <li>Digital & scanned multi-page files</li>
+          <li>Mixed tabular structures & line items</li>
+        </ul>
+      </div>
+
+      <div class="node-card" style="margin-top: 20px;">
+        <div class="top-accent accent-gray"></div>
+        <div class="node-header">
+          <div class="node-title">Repair Estimates</div>
+          <div class="badge badge-gray">Tables</div>
+        </div>
+        <ul class="node-list">
+          <li>Multi-column parts breakdowns</li>
+          <li>Tax, subtotal, and labor calculations</li>
+          <li>Variable invoice column headers</li>
+        </ul>
+      </div>
+
+      <div class="node-card" style="margin-top: 20px;">
+        <div class="top-accent accent-gray"></div>
+        <div class="node-header">
+          <div class="node-title">Identity & Claims</div>
+          <div class="badge badge-gray">Images</div>
+        </div>
+        <ul class="node-list">
+          <li>Driver licenses & Registration Cards</li>
+          <li>Degraded 150 DPI mobile photos</li>
+          <li>Rotated & skewed perspectives</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SWIMLANE 2: AWS VPC -->
+    <div class="swimlane lane-aws">
+      <div class="lane-title">2. AWS Cloud GPU Environment (VPC)</div>
+
+      <div class="aws-grid">
+        <!-- Node 2A -->
+        <div class="node-card" style="margin-top: 50px;">
+          <div class="top-accent accent-blue"></div>
+          <div class="node-header">
+            <div class="node-title">API & Preprocessor</div>
+            <div class="badge badge-blue">Gateway</div>
+          </div>
+          <ul class="node-list">
+            <li><strong>FastAPI Async Endpoint</strong></li>
+            <li>DPI scaling (150–200 DPI)</li>
+            <li>OpenCV auto-deskew & rotation</li>
+            <li>pdfplumber digital text bypass</li>
+          </ul>
+        </div>
+
+        <!-- Node 2B (FEATURED) -->
+        <div class="node-card highlight" style="margin-top: 20px;">
+          <div class="top-accent accent-blue"></div>
+          <div class="node-header">
+            <div class="node-title">Qwen 2.5-VL 7B</div>
+            <div class="badge badge-blue">AI Core</div>
+          </div>
+          <ul class="node-list">
+            <li><strong>vLLM Serving on G5.xlarge</strong></li>
+            <li>End-to-end visual reasoning</li>
+            <li>Dynamic batching (Batch size 2)</li>
+            <li>Zero bounding-box coordinate drift</li>
+            <li>Private VPC execution (Zero leakage)</li>
+          </ul>
+        </div>
+
+        <!-- Column with Validation & Fallback -->
+        <div>
+          <!-- Node 2C -->
+          <div class="node-card" style="margin-top: 50px;">
+            <div class="top-accent accent-amber"></div>
+            <div class="node-header">
+              <div class="node-title">Pydantic Validator</div>
+              <div class="badge badge-amber">Guardrails</div>
+            </div>
+            <ul class="node-list">
+              <li><strong>Strict JSON Schema enforcement</strong></li>
+              <li>Regex date validation (YYYY-MM-DD)</li>
+              <li>Reconciliation: Subtotal+Tax = Total</li>
+              <li>Field confidence score &gt; 0.95</li>
+            </ul>
+          </div>
+
+          <!-- Node 2D -->
+          <div class="node-card" style="margin-top: 20px;">
+            <div class="top-accent accent-red"></div>
+            <div class="node-header">
+              <div class="node-title">Review & Triage</div>
+              <div class="badge badge-red">Human Review</div>
+            </div>
+            <ul class="node-list">
+              <li>Triggers on math mismatch</li>
+              <li>Flags missing mandatory fields</li>
+              <li>Claims adjuster review queue</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SWIMLANE 3: STORAGE -->
+    <div class="swimlane lane-storage">
+      <div class="lane-title">3. Storage & Downstream Integration</div>
+
+      <div class="node-card" style="margin-top: 30px;">
+        <div class="top-accent accent-green"></div>
+        <div class="node-header">
+          <div class="node-title">PostgreSQL Storage</div>
+          <div class="badge badge-green">Database</div>
+        </div>
+        <ul class="node-list">
+          <li>Relational schema for invoices</li>
+          <li>Indexed supplier names & dates</li>
+          <li>Normalized line items table</li>
+        </ul>
+      </div>
+
+      <div class="node-card" style="margin-top: 20px;">
+        <div class="top-accent accent-green"></div>
+        <div class="node-header">
+          <div class="node-title">CSV / Excel Export</div>
+          <div class="badge badge-green">Analytics</div>
+        </div>
+        <ul class="node-list">
+          <li>Automated batch spreadsheet export</li>
+          <li>Flagged review column for anomalies</li>
+          <li>Direct financial & accounting sync</li>
+        </ul>
+      </div>
+
+      <div class="node-card" style="margin-top: 20px;">
+        <div class="top-accent accent-green"></div>
+        <div class="node-header">
+          <div class="node-title">Enterprise Hooks</div>
+          <div class="badge badge-green">Workflow</div>
+        </div>
+        <ul class="node-list">
+          <li>Genesis claims integration</li>
+          <li>Automated webhook triggers</li>
+          <li>Zero manual data re-keying</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
